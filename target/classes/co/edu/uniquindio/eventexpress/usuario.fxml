@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.edu.uniquindio.eventexpress.controller.UsuarioController"
+            stylesheets="@styles.css">
+
+    <left>
+        <VBox styleClass="sidebar" spacing="6">
+            <padding>
+                <Insets top="20" right="12" bottom="20" left="12"/>
+            </padding>
+            <Label fx:id="lblNombreUsuario" text="Usuario"
+                   style="-fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+            <Region prefHeight="16"/>
+            <Button text="Explorar" onAction="#mostrarVistaListado"
+                    maxWidth="Infinity" styleClass="sidebar-btn"/>
+            <Button text="Mi Compra" onAction="#mostrarVistaCarrito"
+                    maxWidth="Infinity" styleClass="sidebar-btn"/>
+            <Button text="Historial" onAction="#mostrarVistaHistorial"
+                    maxWidth="Infinity" styleClass="sidebar-btn"/>
+            <Button text="Perfil" onAction="#mostrarVistaPerfil"
+                    maxWidth="Infinity" styleClass="sidebar-btn"/>
+            <Region VBox.vgrow="ALWAYS"/>
+            <Button text="Cerrar Sesión" onAction="#cerrarSesion"
+                    maxWidth="Infinity" styleClass="sidebar-btn"/>
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane>
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <VBox fx:id="vistaListado" spacing="14" visible="true" managed="true">
+                <Label text="Explorar eventos"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <TextField fx:id="txtBusqueda" promptText="Buscar evento..."
+                               styleClass="form-field" HBox.hgrow="ALWAYS"/>
+                    <ComboBox fx:id="cmbCategoria" promptText="Categoría"/>
+                    <ComboBox fx:id="cmbCiudad" promptText="Ciudad"/>
+                    <Button text="Filtrar" onAction="#aplicarFiltros" styleClass="btn-primary"/>
+                </HBox>
+                <ScrollPane fitToWidth="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
+                    <FlowPane fx:id="panelEventos" hgap="14" vgap="14">
+                        <padding>
+                            <Insets top="4" right="4" bottom="4" left="4"/>
+                        </padding>
+                    </FlowPane>
+                </ScrollPane>
+            </VBox>
+
+            <VBox fx:id="vistaAuditorio" spacing="14" visible="false" managed="false">
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <Button text="← Volver" onAction="#volverAListado" styleClass="btn-primary"/>
+                    <Label fx:id="lblEvento" text="Evento"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                </HBox>
+                <HBox spacing="20" VBox.vgrow="ALWAYS">
+                    <ScrollPane fitToWidth="true" styleClass="scroll-pane" HBox.hgrow="ALWAYS">
+                        <VBox spacing="16">
+                            <VBox spacing="6">
+                                <Label fx:id="lblZona1" text="Zona 1"
+                                       style="-fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                                <GridPane fx:id="gridZona1" hgap="6" vgap="6"/>
+                            </VBox>
+                            <VBox spacing="6">
+                                <Label fx:id="lblZona2" text="Zona 2"
+                                       style="-fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                                <GridPane fx:id="gridZona2" hgap="6" vgap="6"/>
+                            </VBox>
+                            <VBox spacing="6">
+                                <Label fx:id="lblZona3" text="Zona 3"
+                                       style="-fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                                <GridPane fx:id="gridZona3" hgap="6" vgap="6"/>
+                            </VBox>
+                        </VBox>
+                    </ScrollPane>
+                    <VBox spacing="10" prefWidth="200" minWidth="200" maxWidth="200"
+                          styleClass="metric-card">
+                        <Label text="Asientos seleccionados"
+                               style="-fx-font-weight: bold;"/>
+                        <ListView fx:id="listAsientos" prefHeight="160"/>
+                        <CheckBox fx:id="chkVip" text="VIP" onAction="#recalcularTotal"/>
+                        <CheckBox fx:id="chkSeguro" text="Seguro" onAction="#recalcularTotal"/>
+                        <CheckBox fx:id="chkParqueadero" text="Parqueadero" onAction="#recalcularTotal"/>
+                        <Region VBox.vgrow="ALWAYS"/>
+                        <Label fx:id="lblTotal" text="Total: $0"
+                               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #185FA5;"/>
+                        <Button fx:id="btnPagar" text="Ir al pago" onAction="#irAlPago"
+                                maxWidth="Infinity" styleClass="btn-primary" disable="true"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="vistaCarrito" spacing="14" visible="false" managed="false">
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <Button text="← Volver" onAction="#volverAlAuditorio" styleClass="btn-primary"/>
+                    <Label text="Resumen de compra"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                </HBox>
+                <TableView fx:id="tablaEntradas" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colDescripcion" text="Descripción" prefWidth="380"/>
+                        <TableColumn fx:id="colPrecio" text="Precio" prefWidth="160"/>
+                    </columns>
+                </TableView>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Método de pago:"/>
+                    <ComboBox fx:id="cmbMetodoPago" promptText="Selecciona método"
+                              onAction="#cambiarMetodoPago"/>
+                </HBox>
+                <VBox fx:id="panelCamposPago" spacing="8"/>
+                <HBox spacing="14" alignment="CENTER_RIGHT">
+                    <Label fx:id="lblTotalCarrito" text="Total: $0"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #185FA5;"/>
+                    <Button text="Confirmar pago" onAction="#confirmarPago" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="vistaHistorial" spacing="14" visible="false" managed="false">
+                <Label text="Mis compras"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Estado:"/>
+                    <ComboBox fx:id="cmbFiltroEstado" promptText="Todos"/>
+                    <Button text="Aplicar" onAction="#aplicarFiltroHistorial" styleClass="btn-primary"/>
+                </HBox>
+                <TableView fx:id="tablaHistorial" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colHistEvento" text="Evento" prefWidth="240"/>
+                        <TableColumn fx:id="colHistFecha" text="Fecha" prefWidth="160"/>
+                        <TableColumn fx:id="colHistTotal" text="Total" prefWidth="120"/>
+                        <TableColumn fx:id="colHistEstado" text="Estado" prefWidth="140"/>
+                    </columns>
+                </TableView>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button text="Cancelar seleccionada" onAction="#cancelarCompraSeleccionada"
+                            styleClass="btn-danger"/>
+                    <Button text="Descargar PDF" onAction="#descargarPdf" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="vistaPerfil" spacing="14" visible="false" managed="false" maxWidth="460">
+                <Label text="Mi perfil"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <VBox spacing="6">
+                    <Label text="Nombre"/>
+                    <TextField fx:id="txtPerfilNombre" styleClass="form-field"/>
+                </VBox>
+                <VBox spacing="6">
+                    <Label text="Correo"/>
+                    <TextField fx:id="txtPerfilCorreo" styleClass="form-field"/>
+                </VBox>
+                <VBox spacing="6">
+                    <Label text="Teléfono"/>
+                    <TextField fx:id="txtPerfilTelefono" styleClass="form-field"/>
+                </VBox>
+                <Label text="Métodos de pago guardados"
+                       style="-fx-font-weight: bold;"/>
+                <ListView fx:id="listMetodosPago" prefHeight="140"/>
+                <HBox spacing="10">
+                    <Button text="Guardar" onAction="#guardarPerfil" styleClass="btn-primary"/>
+                    <Button text="Agregar método pago" onAction="#agregarMetodoPago"
+                            styleClass="btn-primary"
+                            style="-fx-background-color: #1D9E75;"/>
+                </HBox>
+            </VBox>
+
+        </StackPane>
+    </center>
+
+</BorderPane>

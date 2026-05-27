@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.edu.uniquindio.eventexpress.controller.AdminController"
+            stylesheets="@styles.css">
+
+    <left>
+        <VBox styleClass="sidebar" spacing="6">
+            <padding>
+                <Insets top="20" right="12" bottom="20" left="12"/>
+            </padding>
+            <Label text="Administración"
+                   style="-fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+            <Label fx:id="lblAdmin" text="admin"
+                   style="-fx-text-fill: #b0b0c0; -fx-font-size: 11px;"/>
+            <Region prefHeight="16"/>
+            <Button text="Eventos" onAction="#mostrarVistaEventos"
+                    maxWidth="Infinity" styleClass="sidebar-btn"/>
+            <Button text="Recintos" onAction="#mostrarVistaRecintos"
+                    maxWidth="Infinity" styleClass="sidebar-btn"/>
+            <Button text="Compras" onAction="#mostrarVistaCompras"
+                    maxWidth="Infinity" styleClass="sidebar-btn"/>
+            <Button text="Métricas" onAction="#mostrarVistaMetricas"
+                    maxWidth="Infinity" styleClass="sidebar-btn"/>
+            <Region VBox.vgrow="ALWAYS"/>
+            <Button text="Cerrar Sesión" onAction="#cerrarSesion"
+                    maxWidth="Infinity" styleClass="sidebar-btn"/>
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane>
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <VBox fx:id="vistaGestionEventos" spacing="14" visible="true" managed="true">
+                <Label text="Gestión de eventos"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <TableView fx:id="tablaEventos" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colEvNombre" text="Nombre" prefWidth="200"/>
+                        <TableColumn fx:id="colEvCategoria" text="Categoría" prefWidth="120"/>
+                        <TableColumn fx:id="colEvCiudad" text="Ciudad" prefWidth="120"/>
+                        <TableColumn fx:id="colEvFecha" text="Fecha" prefWidth="150"/>
+                        <TableColumn fx:id="colEvEstado" text="Estado" prefWidth="120"/>
+                    </columns>
+                </TableView>
+                <HBox spacing="10">
+                    <Button text="Publicar" onAction="#publicarEvento" styleClass="btn-primary"/>
+                    <Button text="Pausar" onAction="#pausarEvento" styleClass="btn-primary"
+                            style="-fx-background-color: #EF9F27; -fx-text-fill: #412402;"/>
+                    <Button text="Cancelar evento" onAction="#cancelarEvento" styleClass="btn-danger"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Nuevo evento" onAction="#nuevoEvento" styleClass="btn-primary"/>
+                </HBox>
+
+                <VBox fx:id="panelFormEvento" spacing="8" visible="false" managed="false"
+                      styleClass="metric-card">
+                    <Label text="Nuevo evento" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                    <Label text="Nombre"/>
+                    <TextField fx:id="txtEvNombre" styleClass="form-field"/>
+                    <Label text="Descripción"/>
+                    <TextArea fx:id="txtEvDescripcion" prefRowCount="2"/>
+                    <Label text="Ciudad"/>
+                    <TextField fx:id="txtEvCiudad" styleClass="form-field"/>
+                    <HBox spacing="10">
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="Categoría"/>
+                            <ComboBox fx:id="cmbEvCategoria" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="Fecha"/>
+                            <DatePicker fx:id="dpEvFecha" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="Recinto"/>
+                            <ComboBox fx:id="cmbEvRecinto" maxWidth="Infinity"/>
+                        </VBox>
+                    </HBox>
+                    <HBox spacing="10">
+                        <Button text="Guardar" onAction="#guardarEvento" styleClass="btn-primary"/>
+                        <Button text="Cerrar" onAction="#cerrarFormEvento" styleClass="btn-primary"
+                                style="-fx-background-color: #888780;"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <VBox fx:id="vistaGestionRecintos" spacing="14" visible="false" managed="false">
+                <Label text="Gestión de recintos"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <TreeView fx:id="treeRecintos" VBox.vgrow="ALWAYS"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button text="Bloquear asiento" onAction="#bloquearAsiento" styleClass="btn-danger"/>
+                    <Button text="Liberar asiento" onAction="#liberarAsiento" styleClass="btn-primary"/>
+                </HBox>
+                <Label fx:id="lblDetalleNodo" text="Selecciona un nodo del árbol"
+                       style="-fx-text-fill: #555;"/>
+            </VBox>
+
+            <VBox fx:id="vistaGestionCompras" spacing="14" visible="false" managed="false">
+                <Label text="Gestión de compras"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <TableView fx:id="tablaCompras" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colCoId" text="ID" prefWidth="180"/>
+                        <TableColumn fx:id="colCoUsuario" text="Usuario" prefWidth="160"/>
+                        <TableColumn fx:id="colCoEvento" text="Evento" prefWidth="180"/>
+                        <TableColumn fx:id="colCoTotal" text="Total" prefWidth="120"/>
+                        <TableColumn fx:id="colCoEstado" text="Estado" prefWidth="120"/>
+                    </columns>
+                </TableView>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Motivo:"/>
+                    <TextField fx:id="txtMotivoCancel" promptText="Motivo de cancelación"
+                               styleClass="form-field" HBox.hgrow="ALWAYS"/>
+                    <Button text="Cancelar con auditoría" onAction="#cancelarCompraAuditoria"
+                            styleClass="btn-danger"/>
+                    <Button text="Reembolsar" onAction="#reembolsarCompra" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="vistaMetricas" spacing="14" visible="false" managed="false">
+                <Label text="Métricas y reportes"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <HBox spacing="14">
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="Total ventas" styleClass="total-etiqueta"/>
+                        <Label fx:id="lblTotalVentas" text="0" styleClass="total-grande"/>
+                    </VBox>
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="Compras activas" styleClass="total-etiqueta"/>
+                        <Label fx:id="lblComprasActivas" text="0" styleClass="total-grande"/>
+                    </VBox>
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="Tasa cancelación" styleClass="total-etiqueta"/>
+                        <Label fx:id="lblTasaCancelacion" text="0%" styleClass="total-grande"/>
+                    </VBox>
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="Top evento" styleClass="total-etiqueta"/>
+                        <Label fx:id="lblTopEvento" text="-" styleClass="total-grande"/>
+                    </VBox>
+                </HBox>
+                <ScrollPane fitToWidth="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
+                    <VBox spacing="14">
+                        <LineChart fx:id="chartVentas" prefHeight="260">
+                            <xAxis>
+                                <CategoryAxis label="Mes"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis label="Ventas"/>
+                            </yAxis>
+                        </LineChart>
+                        <BarChart fx:id="chartOcupacion" prefHeight="260">
+                            <xAxis>
+                                <CategoryAxis label="Zona"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis label="Ocupación %"/>
+                            </yAxis>
+                        </BarChart>
+                        <PieChart fx:id="chartServicios" prefHeight="260"/>
+                    </VBox>
+                </ScrollPane>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <ComboBox fx:id="cmbTipoReporte" promptText="Tipo de reporte"/>
+                    <Label text="Desde:"/>
+                    <DatePicker fx:id="dpDesde"/>
+                    <Label text="Hasta:"/>
+                    <DatePicker fx:id="dpHasta"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Exportar PDF" onAction="#exportarPdf" styleClass="btn-danger"/>
+                    <Button text="Exportar Excel" onAction="#exportarExcel" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+
+        </StackPane>
+    </center>
+
+</BorderPane>
